@@ -2,7 +2,7 @@
 
 本講義適用於第 7 週起的課堂實作、作業保存與專題開發。每位學生整學期使用自己的 **`115_1_GenAI-APP-Development`** Repo，每週加入老師提供的教材，完成當週要求後 Commit、Push。
 
-建立 Repo 後，透過老師另外提供的 **Google 表單**登記自己的 Repo 首頁連結。老師從已登記的 Repo 查看各週進度，<font color="#C62828"><b>不需要每週另外繳交資料夾連結。</b></font>
+建立 Repo 後https://github.com/a113222009whsu/115_1_GenAI-App-Development.git，透過老師另外提供的 **Google 表單**登記自己的 Repo 首頁連結。老師從已登記的 Repo 查看各週進度，<font color="#C62828"><b>不需要每週另外繳交資料夾連結。</b></font>
 
 第 7 週僅作為下載、資料夾與部署路徑的例子。<font color="#C62828"><b>當週的程式內容、TODO、Python 版本、套件與完成標準，請依當週 README 及老師公告操作。</b></font>
 
@@ -35,7 +35,7 @@
 
 ## 二、分清楚教材來源與自己的作業 Repo
 
-老師提供的公開教材來源：[115_1_GenAI-App-Development-Student](https://github.com/shuochenghu/115_1_GenAI-App-Development-Student)。
+老師提供的公開教材來源：[115_1_GenAI-App-Development-Student](https://github.com/shuochenghu/https://github.com/a113222009whsu/115_1_GenAI-App-Development.git115_1_GenAI-App-Development-Student)。
 
 ```text
 https://github.com/shuochenghu/115_1_GenAI-App-Development-Student.git
