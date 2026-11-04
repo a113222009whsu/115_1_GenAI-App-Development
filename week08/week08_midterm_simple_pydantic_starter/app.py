@@ -45,8 +45,11 @@ class ProjectResult(BaseModel):
     # extra="forbid"拒絕多餘欄位；strict=True不自動轉換錯誤型別。
     # 這裡的strict是本機驗證設定；API的strict Schema由SDK產生。
     model_config = ConfigDict(extra="forbid", strict=True)
-
-    pass  # 請在這裡加入自己的欄位；尚未完成時會在請求前停止。
+    item_name: str = Field(description="商品名稱與品牌規格")
+    condition_and_flaws: str = Field(description="物況與新舊折舊狀況，包含任何瑕疵說明")
+    price_and_deal_method: str = Field(description="售價與交易方式（如面交地點、店到店或運費）")
+    selling_points: list[str] = Field(description="賣點與附贈配件清單")
+    #pass  # 請在這裡加入自己的欄位；尚未完成時會在請求前停止。
 
 
 # TODO C：為自己的模型欄位設定標籤；可依情境修改表單與顯示方式。
