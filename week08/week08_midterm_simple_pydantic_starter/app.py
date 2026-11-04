@@ -30,8 +30,13 @@ st.set_page_config(page_title="期中個人專題", layout="centered")
 # ---------- 1. 自行完成專題定位與輸出設計 ----------
 # A／B／C是個人設計位置；可以自訂情境，不是填入教師範例的固定答案。
 # TODO A：自行選題，填入名稱與任務規則；不是把教師摘要器換名稱。
-APP_TITLE = ""
-INSTRUCTIONS = ""  # 說清楚角色、任務、只能依原文、資訊不足怎麼處理。
+APP_TITLE ="二手物品拍賣公告自動整理器"
+#INSTRUCTIONS = ""  # 說清楚角色、任務、只能依原文、資訊不足怎麼處理。
+INSTRUCTIONS = (
+    "你是一位專業的二手電商小幫手。請分析使用者輸入的物品描述，萃取關鍵規格與賣場資訊。"
+    "必須嚴格依據原文內容回答，不得捏造任何商品狀況、規格或價格。"
+    "若原文缺乏關鍵資訊（例如未提及價格或新舊狀況），請在該欄位標示『原文未提供』。"
+)
 
 # TODO B：依自己的題目，在ProjectResult內定義至少兩個有用途的欄位。
 # 欄位用「名稱: str」或「名稱: list[str]」；不要加預設值，表示每欄必填。
@@ -45,7 +50,12 @@ class ProjectResult(BaseModel):
 
 
 # TODO C：為自己的模型欄位設定標籤；可依情境修改表單與顯示方式。
-FIELD_LABELS = {}
+FIELD_LABELS = {
+    "item_name": "商品名稱與規格",
+    "condition_and_flaws": "物況與新舊說明",
+    "price_and_deal_method": "售價與交易方式",
+    "selling_points": "核心賣點與配件",
+}
 
 
 # ---------- 2. 完整提供的兩個短函式 ----------
