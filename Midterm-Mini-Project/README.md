@@ -1,4 +1,4 @@
-# 第 8 週學生起步專案｜Pydantic 課堂簡化版
+# 二手物品拍賣公告自動整理器
 
 本專案採用 Pydantic 路線。
 專案目標是解決二手賣家在撰寫商品描述時，資訊雜亂、缺乏統一的問題。
@@ -53,6 +53,15 @@ VS Code 的 Python: Select Interpreter 須選本資料夾的 `.venv/Scripts/pyth
 
 ## Cloud 部署（必做）
 
-本專案已成功部署到 Streamlit Community Cloud，並依說明書規範完成驗收。老師可開啟 App 網址並在雲端介面操作，且已具備至少一筆雲端真實 API 成功紀錄。Cloud 入口依 Repo 結構選擇 Midterm-Mini-Project/app.py，並確認了部署分支、套件清單與 Secrets。requirements.txt 已放置於 Repo 根目錄且包含 Pydantic 並已 Push；金鑰已依 .streamlit/secrets.example.toml 的格式放置於平台 Secrets，Cloud Python 版本 3.12 已按平台選項與實測確認。本 README 與驗收表已確實填寫 App 網址（https://1151genai-app-development-8ue3om8dtr9umdemzybq6w.streamlit.app/）、分支入口（main 與 Midterm-Mini-Project/app.py）、Cloud 實際 Python 版本（3.12）、老師觀看權限（已公開）、以及驗收日期與結果（11/6 測試成功）。本專案的正常與資訊不足兩筆測試皆直接在雲端完成，未於本機重複呼叫，並已記錄實際請求數；本專案未出現未部署或未通過的狀況。複製到學期 Repo 時，已依 Git 通用指南調整路徑與清單，並未覆蓋既有套件清單。專案亦已通過教師離線檢查（python -X utf8 scripts/verify_week08_pydantic.py），且已於既有 Windows／CPython 3.14.0 環境確認套件版本：Streamlit 1.63.0、OpenAI 2.49.0、Pydantic 2.14.1、python-dotenv 1.2.3。
+本專案已成功部署到 Streamlit Community Cloud，並依說明書規範完成驗收。老師可開啟 https://1151genai-app-development-8ue3om8dtr9umdemzybq6w.streamlit.app/ 並在雲端介面操作，且已具備至少一筆雲端真實 API 成功紀錄。
 
- **備註**：依據課程規定，期中專案原應置於 Midterm Mini-Project 資料夾。然而，在部署至 Streamlit Community Cloud 時，發現平台底層的套件安裝器（uv pip）無法正確解析包含「空格」的路徑，導致 requirements.txt 找不到而部署失敗。為確保 App 能順利上線，本人將資料夾名稱調整為 Midterm-Mini-Project（以連字號取代空格），並成功完成部署，特此說明。
+**部署設定與環境：**
+- **入口路徑**：`Midterm-Mini-Project/app.py`（分支：`main`）
+- **Cloud Python 版本**：`3.12`（已按平台選項與實測確認）
+- **環境變數**：`requirements.txt` 已放置於 Repo 根目錄並 Push；金鑰已依 `.streamlit/secrets.example.toml` 格式放置於平台 Secrets。
+
+本 README 與驗收表已確實填寫上述資訊，以及老師觀看權限（已公開）、驗收日期與結果（11/6 測試成功）。本專案的正常與資訊不足兩筆測試皆直接在雲端完成，並已記錄實際請求數（共 2 次），未於本機重複呼叫。
+
+專案亦已通過教師離線檢查（`python -X utf8 scripts/verify_week08_pydantic.py`），且已於既有 Windows／CPython 3.14.0 環境確認套件版本：Streamlit 1.63.0、OpenAI 2.49.0、Pydantic 2.14.1、python-dotenv 1.2.3。
+
+**備註**：依據課程規定，期中專案原應置於 `Midterm Mini-Project` 資料夾。然而，在部署至 Streamlit Community Cloud 時，發現平台底層的套件安裝器（`uv pip`）無法正確解析包含「空格」的路徑，導致 `requirements.txt` 找不到而部署失敗。為確保 App 能順利上線，本人將資料夾名稱調整為 `Midterm-Mini-Project`（以連字號取代空格），並成功完成部署，特此說明。
