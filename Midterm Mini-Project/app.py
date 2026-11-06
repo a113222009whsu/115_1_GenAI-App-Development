@@ -138,9 +138,10 @@ with st.sidebar:
     # record放成功資料與原文，error放錯誤文字，兩者不混用。
     # 清除只改本機狀態，0次API；不會取消先前費用或刪除平台紀錄。
     if st.button("清除所有結果"):
-        st.session_state.setdefault("record", None)
-        st.session_state.setdefault("error", "")
-        st.session_state.setdefault("chat_messages", []) 
+        st.session_state.record = None
+        st.session_state.error = ""
+        st.session_state.chat_messages = []
+        st.rerun()
 
 # 記錄結果產生時的模式；切換模式時清掉結果與錯誤，避免誤認來源。
 if st.session_state.get("api_mode") != enable_api:
@@ -152,13 +153,34 @@ tab1, tab2, tab3 = st.tabs(["拍賣公告整理", "拍賣諮詢聊天", "操作�
 
 # ---------- 4. 表單集中收集原文 ----------
 # 只有按提交才處理；改文字或切換畫面不應自行呼叫模型。
-# ==========================================
-# 分頁 1：拍賣公告整理
-# ==========================================
 with tab1:
+    #檔案上傳功能
+    uploaded_file = st.file_uploader("或上傳純文字檔 (支援 .txt / .md)", type=["txt", "md"])
+    
+    file_content = ""
+    if uploaded_file is not None:
+        try:
+            # 讀取檔案並解碼 (使用 utf-8-sig 可避免 Windows 記事本的 BOM 問題)
+            file_content = uploaded_file.getvalue().decode("utf-8-sig")
+            
+            # 檢查字數
+            if len(file_content) > MAX_SOURCE_CHARS:
+                st.error(f"檔案超過 {MAX_SOURCE_CHARS} 字元限制！請縮短檔案內容。")
+                file_content = ""
+            else:
+                st.success("檔案讀取成功！已自動填入下方輸入框。")
+        except Exception as e:
+            st.error(f"檔案讀取失敗，請確認編碼為 UTF-8。錯誤：{type(e).__name__}")
+            file_content = ""
+
     with st.form("project_form"):
-        # 表單內改值先留在瀏覽器，按送出才一起提交並重跑。
-        source = st.text_area("貼上要處理的原文", height=200)
+        if uploaded_file is not None:
+            st.info("已載入上傳的檔案內容。若要手動修改，請先移除上方檔案。")
+            st.text_area("檔案內容預覽", value=file_content, height=200, disabled=True)
+            source = file_content
+        else:
+            source = st.text_area("貼上要處理的原文", height=200)
+            
         submitted = st.form_submit_button("處理資料")
 
     # ---------- 5. 送出後：輸入→設計檢查→API→回應檢查→保存 ----------
@@ -296,13 +318,19 @@ with tab1:
         # 原始JSON供查欄位、型別與除錯，不取代逐欄閱讀原文。
         with st.expander("查看原始 JSON"):
             st.json(record["data"])
+
 with tab2:
-    st.subheader("💬 拍賣諮詢助手")
+    st.subheader("拍賣諮詢助手")
     st.caption("可以詢問定價建議、文案修改或面交安全等問題。")
 
     if not enable_api:
         st.warning("請先在左側勾選「啟用真實 API」才能使用聊天。")
     else:
+        # Reset 功能
+        if st.button("清除聊天紀錄"):
+            st.session_state.chat_messages = []
+            st.rerun()
+
         # 顯示歷史對話
         for msg in st.session_state.chat_messages:
             with st.chat_message(msg["role"]):
@@ -315,30 +343,44 @@ with tab2:
             if len(user_input) > MAX_CHAT_CHARS:
                 st.error("字數超過限制！")
             else:
-                # 顯示使用者訊息
                 with st.chat_message("user"):
                     st.write(user_input)
                 
                 try:
                     key = read_setting("OPENAI_API_KEY")
                     with OpenAI(api_key=key, max_retries=0, timeout=60.0) as client:
-                        # 簡單帶入最近 6 則對話歷史 (Week 5)
-                        messages = st.session_state.chat_messages[-6:] + [{"role": "user", "content": user_input}]
+                        dynamic_instructions = CHAT_INSTRUCTIONS
+                        if st.session_state.record is not None:
+                            data = st.session_state.record["data"]
+                            dynamic_instructions += f"""
+                            
+                            【使用者剛剛整理的商品資訊】
+                            商品名稱：{data['item_name']}
+                            物況：{data['condition_and_flaws']}
+                            價格與交易：{data['price_and_deal_method']}
+                            配件：{'、'.join(data['selling_points']) if data['selling_points'] else '無'}
+                            
+                            請根據上述商品資訊，回答使用者的問題。
+                            """
+
+                        messages = st.session_state.chat_messages[-4:] + [{"role": "user", "content": user_input}]
                         
-                        # Week 3 非串流寫法，最簡單也最穩定
-                        response = client.responses.create(
-                            model=read_setting("OPENAI_MODEL", "gpt-5.4-mini"),
-                            instructions=CHAT_INSTRUCTIONS,
-                            input=messages,
-                            store=False,
-                        )
-                        answer = response.output_text
+                        with st.chat_message("assistant"):
+                            with client.responses.create(
+                                model=read_setting("OPENAI_MODEL", "gpt-5.4-mini"),
+                                instructions=dynamic_instructions, # 這裡改成傳入動態的指令    
+                                input=messages,
+                                store=False,
+                                stream=True, #開啟串流
+                            ) as stream:
+                                def generate():
+                                    for event in stream:
+                                        if event.type == "response.output_text.delta":
+                                            yield event.delta
+                                
+                                answer = st.write_stream(generate())
                     
-                    # 顯示 AI 回答
-                    with st.chat_message("assistant"):
-                        st.write(answer)
-                    
-                    # 成功後才寫入歷史紀錄
+                    # 寫入歷史紀錄
                     st.session_state.chat_messages.append({"role": "user", "content": user_input})
                     st.session_state.chat_messages.append({"role": "assistant", "content": answer})
                     
