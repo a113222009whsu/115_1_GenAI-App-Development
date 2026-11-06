@@ -26,7 +26,7 @@ VS Code 的 Python: Select Interpreter 須選本資料夾的 `.venv/Scripts/pyth
 | 任務 | 修改位置 | 完成條件 |
 |---|---|---|
 | A：定位與規則 | `APP_TITLE`、`INSTRUCTIONS` | 已設定為「二手物品拍賣公告自動整理器」。規則明確要求模型只依原文、不捏造，且若資訊不足須標示「原文未提供」。|
-| B：資料契約 | `class ProjectResult` | 自訂了 4 個有用途的必填欄位，item_name、condition_and_flaws、price_and_deal_method、selling_points），使用 `str` 或 `list[str]`，保留 `extra="forbid"` 與 `strict=True` |
+| B：資料契約 | `class ProjectResult` | 自訂了 4 個有用途的必填欄位，item_name、condition_and_flaws、price_and_deal_method、selling_point，使用 `str` 或 `list[str]`，保留 `extra="forbid"` 與 `strict=True` |
 | C：介面 | `FIELD_LABELS`、表單與結果區 | 加入側邊欄（Sidebar）設定與分頁（Tabs），並實作「精簡/詳細」顯示模式切換，使用者能對照原文閱讀結果。 |
 
 
@@ -53,4 +53,6 @@ VS Code 的 Python: Select Interpreter 須選本資料夾的 `.venv/Scripts/pyth
 
 ## Cloud 部署（必做）
 
-本專案已成功部署到 Streamlit Community Cloud，並依說明書規範完成驗收。老師可開啟 App 網址並在雲端介面操作，且已具備至少一筆雲端真實 API 成功紀錄。Cloud 入口依 Repo 結構選擇 `Midterm Mini-Project/app.py`，並確認了部署分支、套件清單與 Secrets。`requirements.txt` 已放置於入口同層且包含 Pydantic 並已 Push；金鑰已依 `.streamlit/secrets.example.toml` 的格式放置於平台 Secrets，Cloud Python 版本【請填寫平台顯示的版本，例如 3.14】已按平台選項與實測確認。本 README 與驗收表已確實填寫 App 網址【請貼上你的網址】、分支入口（`main` 與 `Midterm Mini-Project/app.py`）、Cloud 實際 Python 版本、【請填寫老師觀看權限，如：已公開】、以及驗收日期與結果【請填寫測試日期與結果，如：2026-11-04 測試成功】。本專案的正常與資訊不足兩筆測試皆直接在雲端完成，未於本機重複呼叫，並已記錄實際請求數；本專案未出現未部署或未通過的狀況。複製到學期 Repo 時，已依 Git 通用指南調整路徑與清單，並未覆蓋既有套件清單。專案亦已通過教師離線檢查（`python -X utf8 scripts/verify_week08_pydantic.py`），且已於既有 Windows／CPython 3.14.0 環境確認套件版本：Streamlit 1.63.0、OpenAI 2.49.0、Pydantic 2.14.1、python-dotenv 1.2.3。
+本專案已成功部署到 Streamlit Community Cloud，並依說明書規範完成驗收。老師可開啟 App 網址並在雲端介面操作，且已具備至少一筆雲端真實 API 成功紀錄。Cloud 入口依 Repo 結構選擇 Midterm-Mini-Project/app.py，並確認了部署分支、套件清單與 Secrets。requirements.txt 已放置於 Repo 根目錄且包含 Pydantic 並已 Push；金鑰已依 .streamlit/secrets.example.toml 的格式放置於平台 Secrets，Cloud Python 版本 3.12 已按平台選項與實測確認。本 README 與驗收表已確實填寫 App 網址（https://1151genai-app-development-8ue3om8dtr9umdemzybq6w.streamlit.app/）、分支入口（main 與 Midterm-Mini-Project/app.py）、Cloud 實際 Python 版本（3.12）、老師觀看權限（已公開）、以及驗收日期與結果（11/6 測試成功）。本專案的正常與資訊不足兩筆測試皆直接在雲端完成，未於本機重複呼叫，並已記錄實際請求數；本專案未出現未部署或未通過的狀況。複製到學期 Repo 時，已依 Git 通用指南調整路徑與清單，並未覆蓋既有套件清單。專案亦已通過教師離線檢查（python -X utf8 scripts/verify_week08_pydantic.py），且已於既有 Windows／CPython 3.14.0 環境確認套件版本：Streamlit 1.63.0、OpenAI 2.49.0、Pydantic 2.14.1、python-dotenv 1.2.3。
+
+ **備註**：依據課程規定，期中專案原應置於 Midterm Mini-Project 資料夾。然而，在部署至 Streamlit Community Cloud 時，發現平台底層的套件安裝器（uv pip）無法正確解析包含「空格」的路徑，導致 requirements.txt 找不到而部署失敗。為確保 App 能順利上線，本人將資料夾名稱調整為 Midterm-Mini-Project（以連字號取代空格），並成功完成部署，特此說明。
